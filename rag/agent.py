@@ -1,5 +1,7 @@
 # ADK core imports
-from google.adk.agents import Agent
+from google.adk.agents import LlmAgent
+from google.adk.models.google_llm import Gemini
+
 from google.adk.tools.load_memory_tool import load_memory_tool
 
 # Local tool imports
@@ -7,14 +9,15 @@ from rag.tools import corpus_tools, storage_tools
 from rag.config import (
     AGENT_NAME,
     AGENT_MODEL,
-    AGENT_OUTPUT_KEY
+    AGENT_OUTPUT_KEY,
+    retry_config  
 )
 
 
 # Create the RAG management agent
-rag_agent = Agent(
+rag_agent = LlmAgent(
     name=AGENT_NAME,
-    model=AGENT_MODEL,
+    model=Gemini(model=AGENT_MODEL, retry_options=retry_config),
     description="Agent for managing and searching Vertex AI RAG corpora and GCS buckets",
     instruction="""
     You are a helpful assistant that manages and searches RAG corpora in Vertex AI and Google Cloud Storage buckets.
