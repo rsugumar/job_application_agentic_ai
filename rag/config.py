@@ -1,7 +1,6 @@
 # Configuration settings for the Vertex AI RAG engine.
 
 import os
-from google.genai import types
 
 
 # Google Cloud Project Settings
@@ -30,10 +29,3 @@ AGENT_OUTPUT_KEY = "rag_response"
 # Logging Settings
 LOG_LEVEL = "INFO"
 LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-
-retry_config = types.HttpRetryOptions(
-    attempts=5,  # Maximum retry attempts
-    exp_base=7,  # Delay multiplier
-    initial_delay=1,
-    http_status_codes=[429, 500, 503, 504],  # Retry on these HTTP errors
-)

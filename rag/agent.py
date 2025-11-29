@@ -10,8 +10,8 @@ from rag.config import (
     AGENT_NAME,
     AGENT_MODEL,
     AGENT_OUTPUT_KEY,
-    retry_config  
 )
+from config import retry_config
 
 
 # Create the RAG management agent
@@ -61,6 +61,10 @@ rag_agent = LlmAgent(
 
     - For any GCS operation (upload, list, delete, etc.), always include the gs://<bucket-name>/<file> URI in your response to the user. When creating, listing, or deleting items (buckets, files, corpora, etc.), display each as a bulleted list, one per line, using the appropriate emoji (ℹ️ for buckets and info, 🗂️ for files, etc.). For example, when listing GCS buckets:
       - 🗂️ gs://bucket-name/
+    
+    Return the final response with the dictionary format that has the key "status" and "response".
+    If the operation is successful, the "status" should be "success" and "response" should contain the result. The result should contain the query and the answer in dictionary format.
+    If the operation fails, the "status" should be "error" and "response" should contain the error message.
     """,
     tools=[
         # RAG corpus management tools
@@ -90,6 +94,5 @@ rag_agent = LlmAgent(
         # Memory tool for accessing conversation history
         load_memory_tool,
     ],
-    # Output key automatically saves the agent's final response in state under this key
     output_key=AGENT_OUTPUT_KEY
 )
