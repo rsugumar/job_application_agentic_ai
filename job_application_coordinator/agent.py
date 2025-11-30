@@ -1,5 +1,3 @@
-import logging
-import re
 from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 
@@ -58,5 +56,3 @@ job_application_coordinator_agent = LlmAgent(
     }
     """,
 )
-
-logger.info(f"✅ {AGENT_NAME} initialized successfully")
