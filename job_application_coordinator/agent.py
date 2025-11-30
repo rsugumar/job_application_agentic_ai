@@ -1,4 +1,6 @@
-from google.adk.agents import SequentialAgent, LlmAgent
+import logging
+import re
+from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
 
 from config import retry_config
@@ -17,32 +19,39 @@ job_application_coordinator_agent = LlmAgent(
     instruction="""
     You coordinate a job application submission workflow by orchestrating three sub-agents.
 
-    WORKFLOW:
-    1. FORM EXTRACTION: Call form_extractor_agent with the URL to get form fields.
-    Input: {"url": "https://..."}
-    Expected Output: {"status": "success", "response": ["field1", "field2", ...], "url": "..."}
-    Error Handling: If status=="error", immediately return {"status": "error", "response": <error_message>}
-    
-    2. RAG RETRIEVAL: Call rag_agent to retrieve user information.
-    Input: Construct query from extracted fields
-    Query Format: "Retrieve information for: <field1>, <field2>, ..."
-    Expected Output: {"status": "success", "response": {<field_data>}, "url": "..."}
-    Error Handling: If no data found, proceed with empty dict {}
-    
-    3. FORM FILLING: Call form_filler_agent to fill the form.
-    Input: {"url": <from_step1>, "data": <from_step2>}
-    Expected Output: {"status": "success", "response": {"filled_fields": [...], "unfilled_fields": [...]}}
-    
-    FINAL OUTPUT FORMAT:
+    WORKFLOW STEPS:
+
+    1. FORM EXTRACTION
+       - Extract the URL from the user request
+       - Call form_extractor_agent to get form field names
+       - On error: Return {"status": "error", "response": error_message}
+       - On success: Proceed to step 2
+
+    2. RAG RETRIEVAL
+       - Extract the user name from the request (e.g., "Apply for sukumar")
+       - If no user name found, ask the user to provide it
+       - Call rag_agent with query: "Retrieve information for user '<USER_NAME>': <field1>, <field2>, ..."
+       - If RAG returns no data: Continue with empty data (don't fail)
+       - If RAG returns error: Log it but continue with empty data
+       - On success: Proceed to step 3
+
+    3. FORM FILLING
+       - Call form_filler_agent with the URL and retrieved data
+       - Pass all data from RAG, even if incomplete
+       - On error: Return error with partial results if available
+       - On success: Proceed to final output
+
+    FINAL OUTPUT (always return this structure):
     {
-        "status": "success" | "error",
+        "status": "success" | "error" | "partial",
         "response": {
-            "filled_fields": [{"field": "name", "value": "..."}],
+            "filled_fields": [{"field": "name", "value": "value"}],
             "unfilled_fields": ["field_name"],
-            "errors": []
+            "errors": ["error_message"]
         },
         "metadata": {
-            "url": "...",
+            "user": "user_name",
+            "url": "form_url",
             "total_fields": N,
             "filled_count": M
         }
@@ -50,8 +59,4 @@ job_application_coordinator_agent = LlmAgent(
     """,
 )
 
-# job_application_coordinator_agent = SequentialAgent(
-#     name="job_application_pipeline",
-#     sub_agents=[form_extractor_agent, rag_agent, form_filler_agent],
-#     description="Agent for coordinating job application operations",
-# )
+logger.info(f"✅ {AGENT_NAME} initialized successfully")
