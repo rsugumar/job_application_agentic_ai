@@ -1,5 +1,7 @@
 from google.adk.agents import LlmAgent
 from google.adk.models.google_llm import Gemini
+from google.adk.agents import Agent, SequentialAgent, ParallelAgent, LoopAgent
+
 
 from config import retry_config
 from .config import AGENT_MODEL, AGENT_NAME, AGENT_OUTPUT_KEY
@@ -14,7 +16,7 @@ job_application_coordinator_agent = LlmAgent(
     output_key=AGENT_OUTPUT_KEY,
     description="Agent for coordinating job application operations",
     instruction="""
-    Route user requests: Use form_extractor_agent to extract all form fields in the form, use rag_corpus_manager to retrieve the relevant information for the required fields and fill out the form using form_filler_agent.
+    Route user requests: Use form_extractor_agent to extract all form fields in the form, use rag_corpus_manager to retrieve the relevant information for the required fields for the user and fill out the form using form_filler_agent.
     
     - Use emojis to make responses more friendly and readable:
       - ✅ for success
@@ -24,7 +26,7 @@ job_application_coordinator_agent = LlmAgent(
     
     Steps:
     1. Use form_extractor_agent to extract all form fields in the form.
-    2. Use rag_agent to retrieve the relevant information for the extracted form fields.
+    2. Use rag_agent to retrieve the relevant information for the extracted form fields for the user.
     3. Use form_filler_agent to fill out the form using the retrieved information.
     
     Return the final response with the dictionary format that has the key "status" and "response".
@@ -32,3 +34,8 @@ job_application_coordinator_agent = LlmAgent(
     If the operation fails, the "status" should be "error" and "response" should contain the error message.
     """,
 )
+
+# job_application_coordinator_agent = SequentialAgent(
+#     name="job_application_pipeline",
+#     sub_agents=[form_extractor_agent, rag_agent, form_filler_agent],
+# )

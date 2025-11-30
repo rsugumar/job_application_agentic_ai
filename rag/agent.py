@@ -46,7 +46,6 @@ rag_agent = LlmAgent(
        - List, get details, and delete files within a corpus
        
     3. CORPUS SEARCHING:
-       - {form_extractor_agent_response} are the specific information to retrieve from the corpora.
        - SEARCH ALL CORPORA: Use search_all_corpora(query_text="your question") to search across ALL available corpora
        - SEARCH SPECIFIC CORPUS: Use query_rag_corpus(corpus_id="ID", query_text="your question") for a specific corpus
        - When the user asks a question or for information, use the search_all_corpora tool by default.

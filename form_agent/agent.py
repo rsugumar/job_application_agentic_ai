@@ -45,12 +45,11 @@ form_extractor_agent = LlmAgent(
       - 🗂️ for lists
     
     Steps:
-    1. Open the given URL using Playwright MCP Tool.
-    2. Parse the form fully and understand the form fields.
-    3. Extract the form fields and return it in dictionary format.
+    1. Navigate to the given URL using playwright_mcp tool.
+    2. Snapshot the form fully and note down the form fields as a list.
     
     Return the final response with the dictionary format that has the key "status" and "response".
-    If the operation is successful, the "status" should be "success" and "response" should contain the result. The result should contain the list of form fields.
+    If the operation is successful, the "status" should be "success" and "response" should contain the list of form fields. such as {"status": "success", "response": ["field1", "field2", "field3"]}
     If the operation fails, the "status" should be "error" and "response" should contain the error message.
     """,
 )
@@ -63,8 +62,7 @@ form_filler_agent = LlmAgent(
     output_key=FILLER_AGENT_OUTPUT_KEY,
     description="Agent for filling out forms using Playwright MCP Tool",
     instruction="""
-    You are a helpful assistant that fills out forms using Playwright MCP Tool by using information from {rag_response}.
-    Your primary goal is to open the given url using Playwright MCP Tool to fill out the form using the information {rag_response} if available.
+    You are a helpful assistant that fills out forms using playwright_mcp tool by using the available information.
     
     - Use emojis to make responses more friendly and readable:
       - ✅ for success
@@ -73,9 +71,9 @@ form_filler_agent = LlmAgent(
       - 🗂️ for lists
     
     Steps:
-    1. Open the given URL using Playwright MCP Tool.
-    2. Fill out the form using the information {rag_response} if available.
-    3. Don't fill out the form if the information is not available.
+    1. Navigate to the given URL using playwright_mcp tool.
+    2. Fill out the form using the information {rag_response}.
+    3. Don't fill out the field particularly when the information is not available for the field.
     4. Don't close the browser after filling out the form.
     
     Return the final response with the dictionary format that has the key "status" and "response".
@@ -84,24 +82,24 @@ form_filler_agent = LlmAgent(
     """,
 )
 
-# form coordinator agent
-form_coordinator_agent = LlmAgent(
-    model=Gemini(model=AGENT_MODEL, retry_options=retry_config),
-    name=COORDINATOR_AGENT_NAME,
-    tools=[AgentTool(agent=form_extractor_agent), AgentTool(agent=form_filler_agent)],
-    output_key=COORDINATOR_AGENT_OUTPUT_KEY,
-    description="Agent for coordinating form operations",
-    instruction="""
-    Route user requests: Use form_extractor_agent to extract form details and form_filler_agent to fill out the form.
+# # form coordinator agent
+# form_coordinator_agent = LlmAgent(
+#     model=Gemini(model=AGENT_MODEL, retry_options=retry_config),
+#     name=COORDINATOR_AGENT_NAME,
+#     tools=[AgentTool(agent=form_extractor_agent), AgentTool(agent=form_filler_agent)],
+#     output_key=COORDINATOR_AGENT_OUTPUT_KEY,
+#     description="Agent for coordinating form operations",
+#     instruction="""
+#     Route user requests: Use form_extractor_agent to extract form details and form_filler_agent to fill out the form.
     
-    First use form_extractor_agent to extract form details and then use form_filler_agent to fill out the form when {rag_response} is available.
+#     First use form_extractor_agent to extract form details and then use form_filler_agent to fill out the form when {rag_response} is available.
     
-    - Use emojis to make responses more friendly and readable:
-      - ✅ for success
-      - ❌ for errors
-      - ℹ️ for info
-      - 🗂️ for lists
+#     - Use emojis to make responses more friendly and readable:
+#       - ✅ for success
+#       - ❌ for errors
+#       - ℹ️ for info
+#       - 🗂️ for lists
     
-    Return the final response with the dictionary format that has the key "status" and "response".
-    """,
-)
+#     Return the final response with the dictionary format that has the key "status" and "response".
+#     """,
+# )
