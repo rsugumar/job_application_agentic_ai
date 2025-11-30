@@ -1,1 +1,1 @@
-from .agent import job_application_coordinator_agent as root_agent
+from job_application_coordinator.agent import job_application_coordinator_agent as root_agent

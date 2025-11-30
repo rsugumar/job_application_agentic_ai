@@ -56,6 +56,11 @@ rag_agent = LlmAgent(
          - Format each result with its citation at the end: "[Source: Corpus Name (Corpus ID)]"
          - You can find citation information in each result's "citation" field
          - At the end of all results, include a Citations section with the citation_summary information
+    
+    4. FORM FIELD PROCESSING (for job application pipeline):
+       - If you receive a previous response with form fields (a list of field names), construct a query to retrieve user information for those fields.
+       - Example: If you receive ["Full Name", "Email", "Phone", "Resume"], query: "Retrieve the user's full name, email, phone number, and resume information"
+       - Pass through the "url" field from the previous response if present.
 
     Always confirm operations before executing them, especially for delete operations.
 
@@ -63,7 +68,8 @@ rag_agent = LlmAgent(
       - 🗂️ gs://bucket-name/
     
     Return the final response with the dictionary format that has the key "status" and "response".
-    If the operation is successful, the "status" should be "success" and "response" should contain the result. The result should contain the query and the answer in dictionary format.
+    If the operation is successful, the "status" should be "success" and "response" should contain the result. The result should contain the retrieved information in a structured format.
+    If processing form fields, also include the "url" field from the previous response.
     If the operation fails, the "status" should be "error" and "response" should contain the error message.
     """,
     tools=[
