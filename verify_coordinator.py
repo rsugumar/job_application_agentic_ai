@@ -9,7 +9,7 @@ from job_application_coordinator.agent import job_application_coordinator_agent
 load_dotenv()
 
 async def main():
-    runner = InMemoryRunner(agent=job_application_coordinator_agent)   
+    runner = InMemoryRunner(agent=job_application_coordinator_agent)
     print("Running coordinator agent verification...")
 
     try:
