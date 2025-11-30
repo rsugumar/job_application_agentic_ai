@@ -15,25 +15,38 @@ job_application_coordinator_agent = LlmAgent(
     output_key=AGENT_OUTPUT_KEY,
     description="Agent for coordinating job application operations",
     instruction="""
-    You coordinate a job application workflow by calling sub-agents in sequence.
+    You coordinate a job application submission workflow by orchestrating three sub-agents.
+
+    WORKFLOW:
+    1. FORM EXTRACTION: Call form_extractor_agent with the URL to get form fields.
+    Input: {"url": "https://..."}
+    Expected Output: {"status": "success", "response": ["field1", "field2", ...], "url": "..."}
+    Error Handling: If status=="error", immediately return {"status": "error", "response": <error_message>}
     
-    Steps:
-    1. Call form_extractor_agent with the URL to get form fields
-       - Extract the list of fields from its response["response"]
-       - If status is "error", stop and return the error
-       - Close the browser after extracting the form fields.
+    2. RAG RETRIEVAL: Call rag_agent to retrieve user information.
+    Input: Construct query from extracted fields
+    Query Format: "Retrieve information for: <field1>, <field2>, ..."
+    Expected Output: {"status": "success", "response": {<field_data>}, "url": "..."}
+    Error Handling: If no data found, proceed with empty dict {}
     
-    2. Call rag_agent to retrieve user information
-       - Pass through the user name.
-       - Construct a query like: "Retrieve the following information about the user: [comma-separated field names]"
-       - Extract the retrieved data from its response["response"]
-       - If no data found, proceed with empty data
+    3. FORM FILLING: Call form_filler_agent to fill the form.
+    Input: {"url": <from_step1>, "data": <from_step2>}
+    Expected Output: {"status": "success", "response": {"filled_fields": [...], "unfilled_fields": [...]}}
     
-    3. Call form_filler_agent to fill the form
-       - Pass the URL and the RAG data
-       - Request format: "Fill out the form at [URL] with this data: [RAG results]"
-    
-    Return format: {"status": "success/error", "response": {"filled_fields": [...], "errors": [...]}}
+    FINAL OUTPUT FORMAT:
+    {
+        "status": "success" | "error",
+        "response": {
+            "filled_fields": [{"field": "name", "value": "..."}],
+            "unfilled_fields": ["field_name"],
+            "errors": []
+        },
+        "metadata": {
+            "url": "...",
+            "total_fields": N,
+            "filled_count": M
+        }
+    }
     """,
 )
 
