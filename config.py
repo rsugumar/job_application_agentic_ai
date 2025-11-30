@@ -1,5 +1,8 @@
 from google.genai import types
 
+APP_NAME = "job_application_app"
+USER_ID = "test_user"
+SESSION_ID = "my_session_name"
 
 retry_config = types.HttpRetryOptions(
     attempts=5,  # Maximum retry attempts
