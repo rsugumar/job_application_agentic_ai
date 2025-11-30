@@ -62,8 +62,8 @@ Agents are the ideal solution for this problem because:
 **Components:**
 
 1. **Job Application Coordinator**: Orchestrates the entire workflow
-2. **Form Extractor Agent**: Uses Playwright to analyze forms and extract field names
-3. **RAG Agent**: Manages user data in Vertex AI RAG corpora and retrieves relevant information
+2. **RAG Agent**: Manages user data in Vertex AI RAG corpora and retrieves relevant information. *__Important__*: Please use this agent to create RAG corpus in GCS for the user profile before hand.
+3. **Form Extractor Agent**: Uses Playwright to analyze forms and extract field names
 4. **Form Filler Agent**: Uses Playwright to fill forms with retrieved data
 
 **Data Flow:**
