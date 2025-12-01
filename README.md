@@ -117,7 +117,6 @@ Please use the RAG agent to create the RAG corpus in GCS for the user profile wh
 - **Intelligent Field Mapping**: Matches form fields to user data semantically
 - **Partial Success Handling**: Reports what was filled vs. what couldn't be filled
 - **Browser State Persistence**: Maintains session between extraction and filling
-- **Comprehensive Logging**: Full audit trail of the application process
 
 ## If I Had More Time, This Is What I'd Do
 
@@ -150,3 +149,10 @@ Please use the RAG agent to create the RAG corpus in GCS for the user profile wh
 - Performance optimization and caching
 
 This system represents a foundation for intelligent job application automation that could significantly reduce the time and effort required for job seekers while improving application quality and consistency.
+
+### Setup / Steps to start
+- Environment variables: `GOOGLE_API_KEY`, `GOOGLE_CLOUD_PROJECT_ID`, `GOOGLE_CLOUD_LOCATION`
+- Setup uv virtual env and do `uv sync`
+- Upload the CV  / profile to GCS bucket using RAG agent
+- RAG corpus creation using RAG agent
+- Use `main.py` after modifying the script a bit which URL you'd like to use for filling
