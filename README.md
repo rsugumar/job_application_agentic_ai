@@ -109,6 +109,10 @@ Please use the RAG agent to create the RAG corpus in GCS for the user profile wh
 
 ### Key Features
 
+- **LLM Powered Agent**: Job application orchestrator is an LLM powered agent
+- **Tools used**: MCP, custom tools are used
+- **Session Service**: Database session service used for session managment stored locally in a sqlite file
+- **Context Engineering**: Context Compaction technique used in the script *main.py* for every 3 invocations
 - **User Context Extraction**: Automatically identifies which user's data to retrieve
 - **Intelligent Field Mapping**: Matches form fields to user data semantically
 - **Partial Success Handling**: Reports what was filled vs. what couldn't be filled
