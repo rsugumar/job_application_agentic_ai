@@ -84,16 +84,20 @@ Agents are the ideal solution for this problem because:
 **Browser Automation:**
 - **Playwright MCP**: Model Context Protocol integration for browser automation
 - **Shared browser sessions**: Maintains state between form extraction and filling
+- **Gemini 2.5 Flash Lite**: Language model for browser automation
 
 **Data Management:**
 - **Vertex AI RAG**: Vector search and document retrieval
 - **Google Cloud Storage**: Document storage and management
 - **Text Embedding 004**: Vector embeddings for semantic search
+- **Gemini 2.5 Flash Lite**: Language model for data retrieval
 
 **Development Tools:**
 - **Python 3.14**: Core language
 - **UV Package Manager**: Dependency management
-- **Jupyter Notebooks**: Development and testing
+
+**How to create the RAG corpus:**
+Please use the RAG agent to create the RAG corpus in GCS for the user profile which has all the necessary tools to accomplish the task.
 
 ### Implementation Approach
 
@@ -114,30 +118,29 @@ Agents are the ideal solution for this problem because:
 ## If I Had More Time, This Is What I'd Do
 
 **1. Enhanced Error Recovery**
-- Implement retry logic with exponential backoff
-- Add circuit breaker pattern for consistently failing domains
-- Browser crash recovery and session restoration
 
-**2. Data Validation & Security**
+**2. Input / Output Schema Validations for LLM Agents**
+
+**3. Data Validation & Security**
 - Input sanitization for form data
 - Secure credential handling for sensitive information
 - API key rotation and secure storage
 
-**3. Testing & Monitoring**
+**4. Testing & Monitoring**
 - Comprehensive unit tests for each agent
 - Integration tests with mock forms
 - Performance monitoring and alerting
 
-**4. Advanced Form Understanding**
+**5. Advanced Form Understanding**
 - Computer vision for CAPTCHA solving
 - Dynamic form handling (multi-step, conditional fields)
 - File upload automation (resume, cover letters)
 
-**5. AI-Powered Personalization**
+**6. AI-Powered Personalization**
 - Custom cover letter generation per job
 - Resume tailoring based on job requirements
 
-**6. Code Quality**
+**7. Code Quality**
 - Type safety with Pydantic schemas
 - Comprehensive error handling
 - Performance optimization and caching
